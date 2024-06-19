@@ -1,10 +1,6 @@
 # jLib C++
 common cpp library
 
-## functions
+## how do you use it?
 
-| compiled | Human Readable |
-| -------- | -------------- |
-| ?CopyFiles@@YAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0_N@Z  | CopyFiles(const std::string& sourceFolder, const std::string& targetFolder, bool debugMode) |
-| ?CreateDirectoryW@@YAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z | CreateDirectory(const std::string& dir) |
-| ?DeleteDirectory@@YAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z | DeleteDirectory(const std::string& dir) |
+these instructions might be usefull (they worked for me) https://stackoverflow.com/a/75525681
