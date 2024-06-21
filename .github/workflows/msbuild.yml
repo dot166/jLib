@@ -86,7 +86,6 @@ jobs:
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
       with:
         tag_name: ${{ env.VERSION }}
-        generate_release_notes: true
         make_latest: true
         files: |
           x86_64_Debug.zip
