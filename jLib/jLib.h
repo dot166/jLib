@@ -3,43 +3,55 @@
 #include <filesystem>
 #include <string>
 
+#ifdef JLIB_EXPORTS
+#define JLIB_API __declspec(dllexport)
+#else
+#define JLIB_API __declspec(dllimport)
+#endif
+
 namespace jLib
 {
-    class Registry
+    namespace Registry
     {
-    public:
+        void JLIB_API CheckAppKey();
+        void JLIB_API SetAppKey(LPCWSTR key);
         // Wites Boolean value to windows registry
-        static void Write_bool_to_Registry(LPCWSTR subkey, LPCWSTR key, bool value);
+        void JLIB_API Write_bool_to_Registry(LPCWSTR key, bool value);
 
         // Returns boolean value from windows registry
-        static bool ReadRegistryBool(LPCWSTR subkey, LPCWSTR key);
+        bool JLIB_API ReadRegistryBool(LPCWSTR key);
 
         // Writes LPCWSTR string to windows registry
-        static void Write_string_to_Registry(LPCWSTR subkey, LPCWSTR key, LPCWSTR value);
+        void JLIB_API Write_string_to_Registry(LPCWSTR key, LPCWSTR value);
 
         // Returns std::string from windows registry
-        static std::string ReadRegistryString(LPCWSTR subkey, LPCWSTR key);
-    };
+        std::string JLIB_API ReadRegistryString(LPCWSTR key);
+    }
 
-    class Dialog
+    namespace Dialog
     {
-    public:
-        static int YesNoDialog(LPCWSTR message, LPCWSTR title, int icon, bool debugMode);
+        int JLIB_API YesNoDialog(LPCWSTR message, LPCWSTR title, int icon, bool debugMode);
 
-        static int OKDialog(LPCWSTR message, LPCWSTR title, int icon, bool debugMode);
-    };
+        int JLIB_API OKDialog(LPCWSTR message, LPCWSTR title, int icon, bool debugMode);
+    }
 
-    class FS
+    namespace FS
     {
-    public:
-        static void CopyFiles(const std::string& sourceFolder, const std::string& targetFolder, bool debugMode);
+        void JLIB_API CopyFiles(const std::string& sourceFolder, const std::string& targetFolder, bool debugMode);
 
-        static void DeleteDirectory(const std::string& dir);
+        void JLIB_API DeleteDirectory(const std::string& dir);
 
-        static std::string GetUserFolder();
+        std::string JLIB_API GetUserFolder();
 
-        static std::string GetAppDataFolder();
+        std::string JLIB_API GetAppDataFolder();
 
-        static void CreateDirectory(const std::string& dir);
-    };
+        void JLIB_API CreateDirectory(const std::string& dir);
+    }
+
+    namespace DebugMode
+    {
+        bool JLIB_API GetDebugMode(const wchar_t appKey);
+
+        void JLIB_API SetDebugMode(bool value);
+    }
 }
