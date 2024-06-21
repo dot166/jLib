@@ -53,8 +53,6 @@ jobs:
 
     - name: Compress Release and Debug .lib and .dll files into .zip
       shell: sh
-        #zip -r x86_64_Debug.zip Debug/
-        #zip -r x86_64_Release.zip Release/
       run: |
         echo "Compressing Debug"
         mkdir Debug/
