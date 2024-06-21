@@ -58,38 +58,38 @@ jobs:
 
     - name: Upload Release Build
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && { $(git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)") != 0 } }}
-        shell: bash
-        run: |          
-          VERSION=v$(cat jLib/Version)
+      shell: bash
+      run: |          
+        VERSION=v$(cat jLib/Version)
 
-          GH=gh_2.21.1_windows_amd64/bin/gh.exe
-          wget https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
-          tar -xf gh_2.21.1_windows_amd64.zip
+        GH=gh_2.21.1_windows_amd64/bin/gh.exe
+        wget https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
+        tar -xf gh_2.21.1_windows_amd64.zip
 
-          echo ${{ secrets.GITHUB_TOKEN }} | $GH auth login --with-token
+        echo ${{ secrets.GITHUB_TOKEN }} | $GH auth login --with-token
 
-          $GH release create $VERSION --notes-file note -d
+        $GH release create $VERSION --notes-file note -d
 
-          # dll
-          echo "::group::-------- jLib.dll"
-          echo Uploading jLib.dll
-          $GH release upload $VERSION x64/Release/jLib.dll
-          echo "::endgroup::"
+        # dll
+        echo "::group::-------- jLib.dll"
+        echo Uploading jLib.dll
+        $GH release upload $VERSION x64/Release/jLib.dll
+        echo "::endgroup::"
 
-          # lib
-          echo "::group::-------- jLib.lib"
-          echo Uploading jLib.lib
-          $GH release upload $VERSION x64/Release/jLib.lib
-          echo "::endgroup::"
+        # lib
+        echo "::group::-------- jLib.lib"
+        echo Uploading jLib.lib
+        $GH release upload $VERSION x64/Release/jLib.lib
+        echo "::endgroup::"
 
-          # header
-          echo "::group::-------- jLib.h"
-          echo Uploading jLib.h
-          $GH release upload $VERSION jLib/jLib.h
-          echo "::endgroup::"
+        # header
+        echo "::group::-------- jLib.h"
+        echo Uploading jLib.h
+        $GH release upload $VERSION jLib/jLib.h
+        echo "::endgroup::"
 
-          $GH release edit $VERSION -t $VERSION
+        $GH release edit $VERSION -t $VERSION
 
-          if [ $IS_DRAFT == "false" ]; then
-            $GH release edit $VERSION --draft=false
-          fi
+        if [ $IS_DRAFT == "false" ]; then
+          $GH release edit $VERSION --draft=false
+        fi
