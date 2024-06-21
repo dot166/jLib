@@ -87,7 +87,7 @@ jobs:
 
         GH=gh_2.21.1_windows_amd64/bin/gh.exe
         curl -fLOSs --retry 2 --retry-delay 60 https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
-        cmd.exe tar -xf gh_2.21.1_windows_amd64.zip
+        cmd.exe cd ${{env.GITHUB_WORKSPACE}} && tar -xf gh_2.21.1_windows_amd64.zip
 
         echo ${{ secrets.GITHUB_TOKEN }} | $GH auth login --with-token
 
