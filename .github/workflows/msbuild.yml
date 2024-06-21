@@ -83,7 +83,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
       with:
-        tag_name: v$(cat jLib/Version)
+        tag_name: ${{ v$(cat jLib/Version) }}
         generate_release_notes: true
         make_latest: true
         files: |
