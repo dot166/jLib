@@ -29,6 +29,8 @@ jobs:
       run: |
         RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)" || RELEASE=1
           echo "RELEASE=$RELEASE" >> $GITHUB_ENV
+        VERSION=v$(cat jLib/Version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
@@ -83,7 +85,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
       with:
-        tag_name: ${{ v$(cat jLib/Version) }}
+        tag_name: ${{ env.VERSION }}
         generate_release_notes: true
         make_latest: true
         files: |
