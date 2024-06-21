@@ -86,7 +86,7 @@ jobs:
         VERSION=v$(cat jLib/Version)
 
         GH=gh_2.21.1_windows_amd64/bin/gh.exe
-        wget https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
+        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
         tar -xf gh_2.21.1_windows_amd64.zip
 
         echo ${{ secrets.GITHUB_TOKEN }} | $GH auth login --with-token
