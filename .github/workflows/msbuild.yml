@@ -53,13 +53,15 @@ jobs:
 
     - name: Compress Release and Debug .lib and .dll files into .zip
       shell: sh
+        #zip -r x86_64_Debug.zip Debug/
+        #zip -r x86_64_Release.zip Release/
       run: |
         echo "Compressing Debug"
         mkdir Debug/
         cp x64/Debug/jLib.dll Debug/
         cp x64/Debug/jLib.lib Debug/
 
-        zip -r x86_64_Debug.zip Debug/
+        tar -a -c -f x86_64_Debug.zip Debug/*.*
         echo "DONE!"
 
         echo "Compressing Release"
@@ -67,7 +69,7 @@ jobs:
         cp x64/Release/jLib.dll Release/
         cp x64/Release/jLib.lib Release/
 
-        zip -r x86_64_Release.zip Release/
+        tar -a -c -f x86_64_Release.zip Release/*.*
         echo "DONE!"
 
     - name: Upload to Continuous Release
