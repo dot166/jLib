@@ -85,34 +85,30 @@ jobs:
       run: |          
         VERSION=v$(cat jLib/Version)
 
-        GH=gh_2.21.1_windows_amd64/bin/gh.exe
-        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/cli/cli/releases/download/v2.21.1/gh_2.21.1_windows_amd64.zip
-        cmd.exe cd ${{env.GITHUB_WORKSPACE}} && tar -xf gh_2.21.1_windows_amd64.zip
+        echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
 
-        echo ${{ secrets.GITHUB_TOKEN }} | $GH auth login --with-token
-
-        $GH release create $VERSION --notes-file note -d
+        gh release create $VERSION --notes-file note -d
 
         # x86_64_Debug
         echo "::group::-------- x86_64_Debug.zip"
         echo Uploading x86_64_Debug.zip
-        $GH release upload $VERSION x86_64_Debug.zip
+        gh release upload $VERSION x86_64_Debug.zip
         echo "::endgroup::"
 
         # x86_64_Release
         echo "::group::-------- x86_64_Release.zip"
         echo Uploading x86_64_Release.zip
-        $GH release upload $VERSION x86_64_Release.zip
+        gh release upload $VERSION x86_64_Release.zip
         echo "::endgroup::"
 
         # header
         echo "::group::-------- jLib.h"
         echo Uploading jLib.h
-        $GH release upload $VERSION jLib/jLib.h
+        gh release upload $VERSION jLib/jLib.h
         echo "::endgroup::"
 
-        $GH release edit $VERSION -t $VERSION
+        gh release edit $VERSION -t $VERSION
 
         if [ $IS_DRAFT == "false" ]; then
-          $GH release edit $VERSION --draft=false
+          gh release edit $VERSION --draft=false
         fi
