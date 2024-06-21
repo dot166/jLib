@@ -24,6 +24,11 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Check if Release build
+      run: |
+        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)" || RELEASE=1
+          echo "RELEASE=$RELEASE" >> $GITHUB_ENV
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
       with:
@@ -34,31 +39,47 @@ jobs:
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
     - name: Build Debug
-      if: ${{ $(git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)") }}
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=Debug ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Upload Debug Build to Continuous Release
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && $(git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)") }}
-      shell: sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/probonopd/uploadtool/raw/master/upload.sh
-        sh upload.sh x64/Debug/jLib.dll x64/Debug/jLib.lib jLib/jLib.h
-
     - name: Build Release
-      if: ${{ $(git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)") != 0 }}
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Upload Release Build
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && { $(git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)") != 0 } }}
-      shell: bash
+    - name: Compress Release and Debug .lib and .dll files into .zip
+      run: |
+        echo "Compressing Debug"
+        mkdir Debug/
+        cp x64/Debug/jLib.dll Debug/
+        cp x64/Debug/jLib.lib Debug/
+
+        zip -r x86_64_Debug.zip Debug/
+        echo "DONE!"
+
+        echo "Compressing Release"
+        mkdir Release/
+        cp x64/Release/jLib.dll Release/
+        cp x64/Release/jLib.lib Release/
+
+        zip -r x86_64_Release.zip Release/
+        echo "DONE!"
+
+    - name: Upload to Continuous Release
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '0' }}
+      shell: sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/probonopd/uploadtool/raw/master/upload.sh
+        sh upload.sh x86_64_Debug.zip x86_64_Release.zip jLib/jLib.h
+
+    - name: upload to new Stable Release
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' } }}
+      shell: sh
       run: |          
         VERSION=v$(cat jLib/Version)
 
@@ -70,16 +91,16 @@ jobs:
 
         $GH release create $VERSION --notes-file note -d
 
-        # dll
-        echo "::group::-------- jLib.dll"
-        echo Uploading jLib.dll
-        $GH release upload $VERSION x64/Release/jLib.dll
+        # x86_64_Debug
+        echo "::group::-------- x86_64_Debug.zip"
+        echo Uploading x86_64_Debug.zip
+        $GH release upload $VERSION x86_64_Debug.zip
         echo "::endgroup::"
 
-        # lib
-        echo "::group::-------- jLib.lib"
-        echo Uploading jLib.lib
-        $GH release upload $VERSION x64/Release/jLib.lib
+        # x86_64_Release
+        echo "::group::-------- x86_64_Release.zip"
+        echo Uploading x86_64_Release.zip
+        $GH release upload $VERSION x86_64_Release.zip
         echo "::endgroup::"
 
         # header
