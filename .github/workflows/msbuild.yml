@@ -48,5 +48,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/dot166/uploadtool/raw/master/upload.sh
+        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/probonopd/uploadtool/raw/master/upload.sh
         sh upload.sh x64/Debug/jLib.dll x64/Debug/jLib.lib jLib/jLib.h
