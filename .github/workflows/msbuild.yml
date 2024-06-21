@@ -78,7 +78,7 @@ jobs:
         sh upload.sh x86_64_Debug.zip x86_64_Release.zip jLib/jLib.h
 
     - name: upload to new Stable Release
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' } }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
       shell: sh
       run: |          
         VERSION=v$(cat jLib/Version)
