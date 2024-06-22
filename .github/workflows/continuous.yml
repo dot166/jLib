@@ -30,6 +30,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh release view "continuous" && gh release delete "continuous" -y --cleanup-tag
 
+    - name: Wait 3 minutes
+      run: sleep 180s
+      shell: sh
+
     - name: Check if Release build
       shell: sh
       run: |
