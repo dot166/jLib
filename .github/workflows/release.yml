@@ -78,6 +78,7 @@ jobs:
       with:
         tag_name: ${{ env.VERSION }}
         make_latest: true
+        generate_release_notes: true
         files: |
           x86_64_Debug.zip
           x86_64_Release.zip

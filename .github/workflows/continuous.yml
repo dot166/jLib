@@ -85,6 +85,8 @@ jobs:
         tag_name: continuous
         name: Continuous preview build
         prerelease: true
+        generate_release_notes: true
+        body: 'GitHub Actions build log: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID'
         files: |
           x86_64_Debug.zip
           x86_64_Release.zip
