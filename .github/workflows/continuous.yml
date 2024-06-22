@@ -78,7 +78,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh release view "continuous" && gh release delete "continuous" -y --cleanup-tag
 
-    - name: Upload to new Stable Release
+    - name: Upload to Continuous Release
       uses: softprops/action-gh-release@v2
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '0' }}
       with:
