@@ -20,6 +20,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - name: Wait 0.75 minutes for the tag to be deleted
+      run: sleep 45s
+      shell: sh
+
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
