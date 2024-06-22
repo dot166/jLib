@@ -27,10 +27,10 @@ jobs:
     - name: Check if Release build
       shell: sh
       run: |
-        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$(cat jLib/Version)" || RELEASE=1
-          echo "RELEASE=$RELEASE" >> $GITHUB_ENV
         VERSION=v$(cat jLib/Version)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$VERSION" || RELEASE=1
+          echo "RELEASE=$RELEASE" >> $GITHUB_ENV
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
