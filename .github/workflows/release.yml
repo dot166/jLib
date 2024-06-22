@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Build jLib
+name: Build jLib Stable Release
 
 on:
   push:
@@ -71,15 +71,6 @@ jobs:
 
         tar -a -c -f x86_64_Release.zip Release/*.*
         echo "DONE!"
-
-    - name: Upload to Continuous Release
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '0' }}
-      shell: sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        curl -fLOSs --retry 2 --retry-delay 60 https://github.com/probonopd/uploadtool/raw/master/upload.sh
-        sh upload.sh x86_64_Debug.zip x86_64_Release.zip jLib/jLib.h
 
     - name: Upload to new Stable Release
       uses: softprops/action-gh-release@v2

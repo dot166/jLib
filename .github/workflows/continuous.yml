@@ -1,0 +1,91 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build jLib Continuous Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: .
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check if Release build
+      shell: sh
+      run: |
+        VERSION=v$(cat jLib/Version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$VERSION" || RELEASE=1
+          echo "RELEASE=$RELEASE" >> $GITHUB_ENV
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build Debug
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=Debug ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build Release
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      # Add additional options to the MSBuild command line here (like platform or verbosity level).
+      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+      run: msbuild /m /p:Configuration=Release ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Compress Release and Debug .lib and .dll files into .zip
+      shell: sh
+      run: |
+        echo "Compressing Debug"
+        mkdir Debug/
+        cp x64/Debug/jLib.dll Debug/
+        cp x64/Debug/jLib.lib Debug/
+
+        tar -a -c -f x86_64_Debug.zip Debug/*.*
+        echo "DONE!"
+
+        echo "Compressing Release"
+        mkdir Release/
+        cp x64/Release/jLib.dll Release/
+        cp x64/Release/jLib.lib Release/
+
+        tar -a -c -f x86_64_Release.zip Release/*.*
+        echo "DONE!"
+
+    - name: Remove Previous Continuous Release Build
+      shell: sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh release view "continuous" && gh release delete "continuous" -y --cleanup-tag
+
+    - name: Upload to new Stable Release
+      uses: softprops/action-gh-release@v2
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '0' }}
+      with:
+        tag_name: continuous
+        name: Continuous preview build
+        prerelease: true
+        files: |
+          x86_64_Debug.zip
+          x86_64_Release.zip
+          jLib/jLib.h
