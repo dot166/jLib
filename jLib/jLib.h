@@ -44,13 +44,11 @@ namespace jLib
         std::string JLIB_API GetUserFolder();
 
         std::string JLIB_API GetAppDataFolder();
-
-        void JLIB_API CreateDirectory(const std::string& dir);
     }
 
     namespace DebugMode
     {
-        bool JLIB_API GetDebugMode(const wchar_t appKey);
+        bool JLIB_API GetDebugMode();
 
         void JLIB_API SetDebugMode(bool value);
     }

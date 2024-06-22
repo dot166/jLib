@@ -94,11 +94,6 @@ namespace jLib
             _dupenv_s(&pValue, &len, "APPDATA");
             return pValue;
         }
-
-        void CreateDirectory(const std::string& dir) {
-            DeleteDirectory(dir);
-            fs::create_directory(dir);
-        }
     }
 
     namespace Registry
@@ -204,7 +199,6 @@ namespace jLib
         bool GetDebugMode()
         {
             jLib::Registry::CheckAppKey();
-            //return jLib::Registry::ReadRegistryBool(appKey + L"\\Config\\jLib", L"DebugMode");
             LPCWSTR jLibConfigSubKey = L"\\Config\\jLib";
             std::wstring configkeyUNPARCED = std::wstring(jLib::Registry::appkey) + jLibConfigSubKey;
             LPCWSTR configkey = configkeyUNPARCED.c_str();
@@ -229,7 +223,6 @@ namespace jLib
         void SetDebugMode(bool value)
         {
             jLib::Registry::CheckAppKey();
-            //jLib::Registry::Write_bool_to_Registry(appKey + L"\\Config\\jLib", L"DebugMode", value);
             HKEY baseKey;
             LPCWSTR jLibConfigSubKey = L"\\Config\\jLib";
             std::wstring configkeyUNPARCED = std::wstring(jLib::Registry::appkey) + jLibConfigSubKey;
