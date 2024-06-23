@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: jLib Continuous Release
+name: Compile jLib
 
 on:
   push:
@@ -37,15 +37,11 @@ jobs:
         echo "CONT=$CONT" >> $GITHUB_ENV
 
     - name: Remove Previous Continuous Release Build
-      if: ${{ env.CONT == '1' }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.CONT == '1' }}
       shell: sh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh release view "continuous" && gh release delete "continuous" -y --cleanup-tag
-
-    - name: Wait 3 minutes for the stable build automation to finish
-      run: sleep 180s
-      shell: sh
 
     - name: Check if Release build
       shell: sh
@@ -94,6 +90,18 @@ jobs:
 
         tar -a -c -f x86_64_Release.zip Release/*.*
         echo "DONE!"
+
+    - name: Upload to new Stable Release
+      uses: softprops/action-gh-release@v2
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        make_latest: true
+        generate_release_notes: true
+        files: |
+          x86_64_Debug.zip
+          x86_64_Release.zip
+          jLib/jLib.h
 
     - name: Upload to Continuous Release
       uses: softprops/action-gh-release@v2
