@@ -27,8 +27,14 @@ jobs:
     - name: Check if a previous Continuous build is available
       shell: sh
       run: |
-        CONT=0 && git show-ref --tags --verify --quiet "refs/tags/continuous" || CONT=1
-          echo "CONT=$CONT" >> $GITHUB_ENV
+        if git show-ref --tags --verify --quiet "refs/tags/continuous"; then
+          echo "Tag continuous exists"
+          CONT=1
+        else
+          echo "Tag continuous does not exist"
+          CONT=0
+        fi
+        echo "CONT=$CONT" >> $GITHUB_ENV
 
     - name: Remove Previous Continuous Release Build
       if: ${{ env.CONT == '1' }}
