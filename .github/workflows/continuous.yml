@@ -24,7 +24,14 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Check if a previous Continuous build is available
+      shell: sh
+      run: |
+        CONT=0 && git show-ref --tags --verify --quiet "refs/tags/continuous" || CONT=1
+          echo "CONT=$CONT" >> $GITHUB_ENV
+
     - name: Remove Previous Continuous Release Build
+      if: ${{ env.CONT == '1' }}
       shell: sh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
