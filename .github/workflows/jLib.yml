@@ -80,7 +80,7 @@ jobs:
       run: |
         VERSION=v$(cat jLib/Version)
           echo "JLIB_VERSION=$VERSION" >> $GITHUB_ENV
-        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$JLIB_VERSION" || RELEASE=1
+        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$VERSION" || RELEASE=1
           echo "RELEASE=$RELEASE" >> $GITHUB_ENV
 
     # Install the .NET Core workload
