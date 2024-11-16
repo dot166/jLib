@@ -13,7 +13,6 @@
         "packagesPath": "/home/nova/.nuget/packages/",
         "outputPath": "/home/nova/RiderProjects/jLib/jLib/obj/",
         "projectStyle": "PackageReference",
-        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "/home/nova/.nuget/NuGet/NuGet.Config"
         ],
