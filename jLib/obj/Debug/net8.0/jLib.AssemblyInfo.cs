@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("jLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c6243d10946c5e7a19147f7bfe8b94568ddab72")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c800b9c1a4ca8093b27eca47189da3f146338912")]
 [assembly: System.Reflection.AssemblyProductAttribute("jLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("jLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
