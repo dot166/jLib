@@ -36,17 +36,13 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: .NET Core Desktop
+name: Build jLib C#
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-env:
-  # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: .
 
 jobs:
 
@@ -83,8 +79,8 @@ jobs:
       shell: sh
       run: |
         VERSION=v$(cat jLib/Version)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$VERSION" || RELEASE=1
+          echo "JLIB_VERSION=$VERSION" >> $GITHUB_ENV
+        RELEASE=0 && git show-ref --tags --verify --quiet "refs/tags/$JLIB_VERSION" || RELEASE=1
           echo "RELEASE=$RELEASE" >> $GITHUB_ENV
 
     # Install the .NET Core workload
@@ -122,7 +118,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'dot166/jLib' && env.RELEASE == '1' }}
       with:
-        tag_name: ${{ env.VERSION }}
+        tag_name: ${{ env.JLIB_VERSION }}
         make_latest: true
         generate_release_notes: true
         files: |
