@@ -98,10 +98,10 @@ jobs:
       run: nuget restore .
 
     - name: Build Debug
-      run: dotnet Build -c Debug
+      run: dotnet build -c Debug
 
     - name: Build Release
-      run: dotnet Build -c Release
+      run: dotnet build -c Release
 
     - name: Copy Release and Debug .dll files into Root Directory
       shell: sh
