@@ -1,31 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jLib", "jLib\jLib.vcxproj", "{5DC68C49-6954-462B-A354-9AFC22B8C405}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jLib", "jLib\jLib.csproj", "{46094965-A2B1-4FB1-A174-39DC521E7CA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Debug|x64.ActiveCfg = Debug|x64
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Debug|x64.Build.0 = Debug|x64
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Debug|x86.ActiveCfg = Debug|Win32
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Debug|x86.Build.0 = Debug|Win32
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Release|x64.ActiveCfg = Release|x64
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Release|x64.Build.0 = Release|x64
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Release|x86.ActiveCfg = Release|Win32
-		{5DC68C49-6954-462B-A354-9AFC22B8C405}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {97D41440-5F85-439A-A954-9E042E7BCCCB}
+		{46094965-A2B1-4FB1-A174-39DC521E7CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46094965-A2B1-4FB1-A174-39DC521E7CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46094965-A2B1-4FB1-A174-39DC521E7CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46094965-A2B1-4FB1-A174-39DC521E7CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
