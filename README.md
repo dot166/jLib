@@ -7,7 +7,7 @@ common C# library for Windows NT, UNIX (possibly) and Linux
 
 ported old code ✅
 
-fix Avalonia UI things ⌛️
+convert UI to console prompts ⌛️
 
 fix config implementation on Linux (and possibly UNIX) ⌛️
 
