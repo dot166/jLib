@@ -7,11 +7,13 @@ common C# library for Windows NT, UNIX (possibly) and Linux
 
 ported old code ✅
 
+fix Avalonia UI things ⌛️
+
 fix config implementation on Linux (and possibly UNIX) ⌛️
 
-tested it on Windows 11 🚫
+test it on Windows 11 🚫
 
-tested it on Linux 🚫
+test it on Linux 🚫
 
 fix random bugs that would appear 🚫
 
