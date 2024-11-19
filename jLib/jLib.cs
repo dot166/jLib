@@ -35,22 +35,22 @@ namespace jLib
             var messageTypeString = messageType switch
             {
                 MessageType.None => "",
-                MessageType.Info => "[INFO]",
-                MessageType.Debug => "[DEBUG]",
-                MessageType.Warning => "[WARNING]",
-                MessageType.Error => "[ERROR]",
-                MessageType.Halt => "[SERIOUS ERROR]",
+                MessageType.Info => "[INFO] ",
+                MessageType.Debug => "[DEBUG] ",
+                MessageType.Warning => "[WARNING] ",
+                MessageType.Error => "[ERROR] ",
+                MessageType.Halt => "[SERIOUS ERROR] ",
                 _ => ""
             };
             switch (messageTypeString)
             {
                 case "[ERROR]":
-                    Console.Error.WriteLine("[ERROR]" + " [" + callingPackage + "] " + message);
+                    Console.Error.WriteLine("[ERROR] [" + callingPackage + "] " + message);
                     break;
                 case "[SERIOUS ERROR]":
-                    throw new ApplicationException("[SERIOUS ERROR]" + " [" + callingPackage + "] " + message);
+                    throw new ApplicationException("[SERIOUS ERROR] [" + callingPackage + "] " + message);
                 default:
-                    Console.WriteLine(messageTypeString + " [" + callingPackage + "] " + message);
+                    Console.WriteLine(messageTypeString + "[" + callingPackage + "] " + message);
                     break;
             }
             return Result.None;
@@ -59,7 +59,17 @@ namespace jLib
         public static Result YesNoPrompt(string message, string title, string callingPackage, MessageType type = MessageType.None)
         {
             // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
-            Console.WriteLine("[" + callingPackage + "]  (" + title + ") " + message + " Y/N");
+            var messageTypeString = type switch
+            {
+                MessageType.None => "",
+                MessageType.Info => "[INFO] ",
+                MessageType.Debug => "[DEBUG] ",
+                MessageType.Warning => "[WARNING] ",
+                MessageType.Error => "[ERROR] ",
+                MessageType.Halt => "[SERIOUS ERROR] ",
+                _ => ""
+            };
+            Console.WriteLine(messageTypeString + "[" + callingPackage + "]  (" + title + ") " + message + " Y/N");
             while (true)
             {
                 while (Console.KeyAvailable == false)
@@ -225,7 +235,17 @@ namespace jLib
         public static Result OkPrompt(string message, string title, string callingPackage, MessageType type = MessageType.None)
         {
             // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
-            Console.WriteLine("[" + callingPackage + "]  (" + title + ") " + message);
+            var messageTypeString = type switch
+            {
+                MessageType.None => "",
+                MessageType.Info => "[INFO] ",
+                MessageType.Debug => "[DEBUG] ",
+                MessageType.Warning => "[WARNING] ",
+                MessageType.Error => "[ERROR] ",
+                MessageType.Halt => "[SERIOUS ERROR] ",
+                _ => ""
+            };
+            Console.WriteLine(messageTypeString + "[" + callingPackage + "]  (" + title + ") " + message);
             Console.WriteLine("Press Any Key To Continue");
             while (true)
             {
