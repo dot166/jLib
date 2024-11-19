@@ -31,6 +31,19 @@
     "accountId": "b71ffdc2-19a0-4536-a37b-4c97b8e3cf6c"
   }
 }]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/23b985dc1a8b47f39a040de60c723b2e5800/b4/8a5272f5/RegistryKey.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/088b41da6728b4771eb8a5b3d28a9b5fc783e3831edbc7f597e79d2cb492b13/SyncTextReader.Unix.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1ca5253011a21574c7aeba7df09386c95221e78dab2a51aac98da57bc5304ccf/ValueType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2ccd2056ec55b7b67558d52e32a887ed5ac7e346fc429b218c188d0a99cb5be/Console.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/31e72e62776b9d98691e517c21aff97687f39e03d37be35513da2b6183dedf5/ArgumentOutOfRangeException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/46715d02725baedea5556e85aa740d0e02ce64d8a5d49955a9233cde9ec9e3d/Interop.IOErrors.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4c61588a7613f8442ed8aad4b49be1cabda2b79dbd4e3d29a8d9b66b5d5833/SR.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/7b2e54a547bd458611a4b8b182d2d96d3296b535c4b172a72b3320ca52352a/Directory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/aa54a2f15b78192889019c430731f38b9bab5d27715d27690d1258c545c87/ConsolePal.Unix.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dd5b623f54e08375eb7545c3cc6facb66b6434a58a8242b5e2726b0a4d8686e/StdInReader.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dda89b2ed0975050b6847325357a756a5866a5435e3ddb4feff535ba36facb7/TextWriter.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="ProjectColorInfo"><![CDATA[{
   "customColor": "",
   "associatedIndex": 3
@@ -61,7 +74,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731795526043</updated>
-      <workItem from="1731795529848" duration="1653000" />
+      <workItem from="1731795529848" duration="14394000" />
     </task>
     <servers />
   </component>

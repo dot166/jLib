@@ -13,6 +13,7 @@
         "packagesPath": "/home/nova/.nuget/packages/",
         "outputPath": "/home/nova/RiderProjects/jLib/jLib/obj/",
         "projectStyle": "PackageReference",
+        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "/home/nova/.nuget/NuGet/NuGet.Config"
         ],
@@ -42,12 +43,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "MessageBox.Avalonia": {
-              "target": "Package",
-              "version": "[3.2.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

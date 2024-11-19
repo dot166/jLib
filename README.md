@@ -7,7 +7,7 @@ common C# library for Windows NT, UNIX (possibly) and Linux
 
 ported old code ✅
 
-convert UI to console prompts ⌛️
+convert UI to console prompts ✅
 
 fix config implementation on Linux (and possibly UNIX) ⌛️
 
