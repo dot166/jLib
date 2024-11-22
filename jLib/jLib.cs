@@ -1,9 +1,10 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using Microsoft.Win32;
+using Config.Net;
 
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace jLib
 {
     public static class ConsoleUi
@@ -306,9 +307,9 @@ namespace jLib
 
     public static class Config
     {
-        public static string? ConfigFolderName { get; private set; }
+        private static string? ConfigFolderName { get; set; }
 
-        public static void CheckConfigFolderName()
+        private static void CheckConfigFolderName()
         {
             if (ConfigFolderName == null)
             {
@@ -323,117 +324,56 @@ namespace jLib
             ConfigFolderName = configFolderName;
         }
 
-        public static void WriteBoolToConfig(string key, bool value)
+        public static bool GetDebugMode()
         {
             CheckConfigFolderName();
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var baseKey = Registry.CurrentUser.OpenSubKey(ConfigFolderName!, true) ??
-                                    Registry.CurrentUser.CreateSubKey(ConfigFolderName!);
-                baseKey.SetValue(key, value ? 1 : 0, RegistryValueKind.DWord);
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "Config Values Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-            }
+            var configLocation = Path.Combine(Fs.GetAppDataFolder(), ConfigFolderName!, "Config", "jLib.json");
+            var settings = new ConfigurationBuilder<IJLibConfig>()
+                .UseJsonFile(configLocation)
+                .Build();
+            return settings.DebugMode;
         }
 
-        public static bool ReadConfigBool(string key)
+        /**
+         * Part of the Partially implemented Console UI Override Code
+         */
+        public static bool GetConsoleUiMode()
         {
             CheckConfigFolderName();
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var configKey = Registry.CurrentUser.OpenSubKey(ConfigFolderName!);
-                if (configKey == null) return false;
-                var value = configKey.GetValue(key);
-                return value != null && (int)value != 0;
-
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "Config Values Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-
-                return false;
-            }
+            var configLocation = Path.Combine(Fs.GetAppDataFolder(), ConfigFolderName!, "Config", "jLib.json");
+            var settings = new ConfigurationBuilder<IJLibConfig>()
+                .UseJsonFile(configLocation)
+                .Build();
+            return settings.ConsoleUiMode;
         }
 
-        public static void WriteStringToRegistry(string key, string value)
+        public static void SetDebugMode(bool debugMode)
         {
             CheckConfigFolderName();
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var baseKey = Registry.CurrentUser.OpenSubKey(ConfigFolderName!, true) ??
-                                    Registry.CurrentUser.CreateSubKey(ConfigFolderName!);
-                baseKey.SetValue(key, value, RegistryValueKind.String);
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "Config Values Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-            }
+            var configLocation = Path.Combine(Fs.GetAppDataFolder(), ConfigFolderName!, "Config", "jLib.json");
+            var settings = new ConfigurationBuilder<IJLibConfig>()
+                .UseJsonFile(configLocation)
+                .Build();
+            settings.DebugMode = debugMode;
         }
 
-        public static string ReadRegistryString(string key)
+        /**
+         * Part of the Partially implemented Console UI Override Code
+         */
+        public static void SetConsoleUiMode(bool consoleUiMode)
         {
             CheckConfigFolderName();
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var configKey = Registry.CurrentUser.OpenSubKey(ConfigFolderName!);
-                if (configKey != null)
-                {
-                    return configKey.GetValue(key) as string ?? string.Empty;
-                }
-
-                return string.Empty;
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "Config Values Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-
-                return string.Empty;
-            }
+            var configLocation = Path.Combine(Fs.GetAppDataFolder(), ConfigFolderName!, "Config", "jLib.json");
+            var settings = new ConfigurationBuilder<IJLibConfig>()
+                .UseJsonFile(configLocation)
+                .Build();
+            settings.ConsoleUiMode = consoleUiMode;
         }
     }
 
-    public static class DebugMode
+    internal interface IJLibConfig
     {
-        public static bool GetDebugMode()
-        {
-            Config.CheckConfigFolderName();
-            const string jLibConfigSubKey = @"\Config\jLib"; 
-            var configKeyLocation = Config.ConfigFolderName + jLibConfigSubKey; 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var configKey = Registry.CurrentUser.OpenSubKey(configKeyLocation);
-                var value = configKey?.GetValue("DebugMode"); 
-                if (value is int i) 
-                { 
-                    return i != 0; 
-                }
-
-                return false;
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "DEBUG Mode Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-                return false;
-            }
-        }
-
-        public static void SetDebugMode(bool value)
-        {
-            Config.CheckConfigFolderName();
-            const string jLibConfigSubKey = @"\Config\jLib";
-            var configKeyLocation = Config.ConfigFolderName + jLibConfigSubKey;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                using var baseKey = Registry.CurrentUser.CreateSubKey(configKeyLocation, true);
-                var completed = value ? 1 : 0;
-                baseKey.SetValue("DebugMode", completed, RegistryValueKind.DWord);
-            }
-            else
-            {
-                ConsoleUi.OkPrompt("Not Implemented Yet on Linux and UNIX...", "DEBUG Mode Not Implemented", "jLib", ConsoleUi.MessageType.Error); // TODO: implement on linux
-            }
-        }
+        bool DebugMode { get; set; }
+        bool ConsoleUiMode { get; set; }
     }
 }

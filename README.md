@@ -9,13 +9,13 @@ ported old code ✅
 
 convert UI to console prompts ✅
 
-fix config implementation on Linux (and possibly UNIX) ⌛️
+fix config implementation on Linux (and possibly UNIX) ✅
 
 test it on Windows 11 🚫
 
 test it on Linux 🚫
 
-fix random bugs that would appear 🚫
+fix random bugs that would appear ⌛
 
 ## how do you use it?
 
