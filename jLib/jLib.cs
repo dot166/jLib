@@ -1,7 +1,4 @@
-using System;
-using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using Config.Net;
 
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
@@ -11,66 +8,53 @@ namespace jLib
     {
         public enum Result
         {
-            None,
-            Ok,
+            Success,
+            Fail,
             Yes,
             No,
-            Abort,
             Cancel,
-            Success,
-            Halt,
         }
 
         public enum MessageType
         {
             None,
             Info,
-            Debug,
             Warning,
             Error,
-            Halt,
         }
 
-        public static Result Log(string message, MessageType messageType, string callingPackage)
+        public static Result Log(string message, MessageType messageType, string callingPackage, Exception? e = null)
         {
+            // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
             var messageTypeString = messageType switch
             {
                 MessageType.None => "",
                 MessageType.Info => "[INFO] ",
-                MessageType.Debug => "[DEBUG] ",
                 MessageType.Warning => "[WARNING] ",
                 MessageType.Error => "[ERROR] ",
-                MessageType.Halt => "[SERIOUS ERROR] ",
                 _ => ""
             };
-            switch (messageTypeString)
+            if (messageTypeString == "[ERROR]")
             {
-                case "[ERROR]":
-                    Console.Error.WriteLine("[ERROR] [" + callingPackage + "] " + message);
-                    break;
-                case "[SERIOUS ERROR]":
-                    throw new ApplicationException("[SERIOUS ERROR] [" + callingPackage + "] " + message);
-                default:
-                    Console.WriteLine(messageTypeString + "[" + callingPackage + "] " + message);
-                    break;
+                throw new ApplicationException("[ERROR] [" + callingPackage + "] " + message, e);
             }
-            return Result.None;
+
+            Console.WriteLine(messageTypeString + "[" + callingPackage + "] " + message);
+            return Result.Success;
         }
 
-        public static Result YesNoPrompt(string message, string title, string callingPackage, MessageType type = MessageType.None)
+        public static Result YesNoPrompt(string message, string callingPackage, MessageType type = MessageType.None)
         {
             // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
             var messageTypeString = type switch
             {
                 MessageType.None => "",
                 MessageType.Info => "[INFO] ",
-                MessageType.Debug => "[DEBUG] ",
                 MessageType.Warning => "[WARNING] ",
                 MessageType.Error => "[ERROR] ",
-                MessageType.Halt => "[SERIOUS ERROR] ",
                 _ => ""
             };
-            Console.WriteLine(messageTypeString + "[" + callingPackage + "]  (" + title + ") " + message + " Y/N");
+            Console.WriteLine(messageTypeString + "[" + callingPackage + "] " + message + " Y/N");
             while (true)
             {
                 while (Console.KeyAvailable == false)
@@ -226,55 +210,35 @@ namespace jLib
                     case ConsoleKey.NoName:
                     case ConsoleKey.Pa1:
                     case ConsoleKey.OemClear:
-                        break;
                     default:
-                        throw new ArgumentOutOfRangeException(key.ToString(), "Invalid key pressed");
+                        break;
                 }
             }
         }
 
+        [Obsolete("OkPrompt() is deprecated, please use Log() instead.", true)]
         public static Result OkPrompt(string message, string title, string callingPackage, MessageType type = MessageType.None)
         {
-            // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
-            var messageTypeString = type switch
-            {
-                MessageType.None => "",
-                MessageType.Info => "[INFO] ",
-                MessageType.Debug => "[DEBUG] ",
-                MessageType.Warning => "[WARNING] ",
-                MessageType.Error => "[ERROR] ",
-                MessageType.Halt => "[SERIOUS ERROR] ",
-                _ => ""
-            };
-            Console.WriteLine(messageTypeString + "[" + callingPackage + "]  (" + title + ") " + message);
-            Console.WriteLine("Press Any Key To Continue");
-            while (true)
-            {
-                while (Console.KeyAvailable == false)
-                    Thread.Sleep(250); // Loop until input is entered.
-
-                Console.ReadKey();
-                return Result.Ok;
-            }
+            return Log("(" + title + ") " + message, type, callingPackage);
         }
     }
     public static class Fs
     {
-        public static void CopyFiles(string sourceFolder, string targetFolder, bool debugMode)
+        public static void CopyFiles(string sourceFolder, string targetFolder)
         {
             Directory.CreateDirectory(targetFolder);
             foreach (var directory in Directory.GetDirectories(sourceFolder))
             {
                 var newDirectory = Path.Combine(targetFolder, Path.GetFileName(directory));
                 Directory.CreateDirectory(newDirectory);
-                CopyFiles(directory, newDirectory, debugMode);
+                CopyFiles(directory, newDirectory);
             }
 
             foreach (var file in Directory.GetFiles(sourceFolder))
             {
-                if (debugMode)
+                if (Config.GetDebugMode())
                 {
-                    ConsoleUi.OkPrompt(file, "File", "jLib");
+                    ConsoleUi.Log(file, ConsoleUi.MessageType.None, "jLib");
                 }
 
                 File.Copy(file, Path.Combine(targetFolder, Path.GetFileName(file)), true);
@@ -285,12 +249,14 @@ namespace jLib
         {
             if (Directory.Exists(dir))
             {
-                ConsoleUi.OkPrompt(dir, "Removing directory:", "jLib", ConsoleUi.MessageType.Info);
+                var yesNoPrompt = ConsoleUi.YesNoPrompt("Are you sure you want to delete directory " + dir + "?", "jLib", ConsoleUi.MessageType.Warning);
+                if (yesNoPrompt != ConsoleUi.Result.Yes) return;
+                ConsoleUi.Log("Removing directory: " + dir, ConsoleUi.MessageType.Info, "jLib");
                 Directory.Delete(dir, true);
             }
             else
             {
-                ConsoleUi.OkPrompt(dir, "Directory does not exist:", "jLib", ConsoleUi.MessageType.Error);
+                ConsoleUi.Log("Directory" + dir + " does not exist", ConsoleUi.MessageType.Warning, "jLib");
             }
         }
 
@@ -314,7 +280,7 @@ namespace jLib
             if (ConfigFolderName == null)
             {
                 ConsoleUi.Log("ConfigFolderName has not been set, please use SetConfigFolderName() when the app is starting!!",
-                    ConsoleUi.MessageType.Halt, 
+                    ConsoleUi.MessageType.Error, 
                     "jLib");
             }
         }
