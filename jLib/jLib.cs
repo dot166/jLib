@@ -23,10 +23,9 @@ namespace jLib
             Error,
         }
 
-        public static Result Log(string message, MessageType messageType, string callingPackage, Exception? e = null)
+        public static string ParseMessageType(MessageType messageType)
         {
-            // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
-            var messageTypeString = messageType switch
+            return messageType switch
             {
                 MessageType.None => "",
                 MessageType.Info => "[INFO] ",
@@ -34,6 +33,12 @@ namespace jLib
                 MessageType.Error => "[ERROR] ",
                 _ => ""
             };
+        }
+
+        public static Result Log(string message, MessageType messageType, string callingPackage, Exception? e = null)
+        {
+            // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
+            var messageTypeString = ParseMessageType(messageType);
             if (messageTypeString == "[ERROR]")
             {
                 throw new ApplicationException("[ERROR] [" + callingPackage + "] " + message, e);
@@ -43,18 +48,10 @@ namespace jLib
             return Result.Success;
         }
 
-        public static Result YesNoPrompt(string message, string callingPackage, MessageType type = MessageType.None)
+        public static Result YesNoPrompt(string message, string callingPackage, MessageType messageType = MessageType.None)
         {
             // TODO: add ability to override to allow use on different UI implementations (Win Forms, Avalonia UI, etc.)
-            var messageTypeString = type switch
-            {
-                MessageType.None => "",
-                MessageType.Info => "[INFO] ",
-                MessageType.Warning => "[WARNING] ",
-                MessageType.Error => "[ERROR] ",
-                _ => ""
-            };
-            Console.WriteLine(messageTypeString + "[" + callingPackage + "] " + message + " Y/N");
+            Console.WriteLine(ParseMessageType(messageType) + "[" + callingPackage + "] " + message + " Y/N");
             while (true)
             {
                 while (Console.KeyAvailable == false)
@@ -236,12 +233,17 @@ namespace jLib
 
             foreach (var file in Directory.GetFiles(sourceFolder))
             {
-                if (Config.GetDebugMode())
+                if (Config.GetDebugMode() == true)
                 {
-                    ConsoleUi.Log(file, ConsoleUi.MessageType.None, "jLib");
+                    ConsoleUi.Log("Currently Copying " + file, ConsoleUi.MessageType.Info, "jLib");
                 }
 
                 File.Copy(file, Path.Combine(targetFolder, Path.GetFileName(file)), true);
+
+                if (Config.GetDebugMode() == true)
+                {
+                    ConsoleUi.Log("Finished Copying " + file, ConsoleUi.MessageType.Info, "jLib");
+                }
             }
         }
 
@@ -251,7 +253,11 @@ namespace jLib
             {
                 var yesNoPrompt = ConsoleUi.YesNoPrompt("Are you sure you want to delete directory " + dir + "?", "jLib", ConsoleUi.MessageType.Warning);
                 if (yesNoPrompt != ConsoleUi.Result.Yes) return;
-                ConsoleUi.Log("Removing directory: " + dir, ConsoleUi.MessageType.Info, "jLib");
+                if (Config.GetDebugMode() == true)
+                {
+                    ConsoleUi.Log("Removing directory: " + dir, ConsoleUi.MessageType.Info, "jLib");
+                }
+
                 Directory.Delete(dir, true);
             }
             else
